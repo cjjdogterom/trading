@@ -25,6 +25,15 @@ from storage import DB
 
 st.set_page_config(page_title="Trading dashboard", page_icon="📈", layout="wide")
 
+# Streamlit Cloud levert secrets via st.secrets, niet als omgevingsvariabelen.
+# load_settings() (gedeeld met de bot) leest os.environ — dus bridge ze hierheen.
+try:
+    for _k, _v in st.secrets.items():
+        if isinstance(_v, str):
+            os.environ.setdefault(_k, _v)
+except Exception:
+    pass
+
 
 @st.cache_resource
 def _broker() -> Broker:
