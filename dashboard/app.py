@@ -132,6 +132,15 @@ try:
     c4.metric("Cash", f"${acct['cash']:,.0f}")
 except Exception as exc:
     st.error(f"Account ophalen mislukt: {exc}")
+    if "unauthorized" in str(exc).lower():
+        st.warning(
+            "🔑 Alpaca wijst je keys af. Controleer in **Manage app → Settings → "
+            "Secrets**:\n"
+            "- `ALPACA_API_KEY` en `ALPACA_SECRET_KEY` zijn een **matchend paar** "
+            "(bij regenereren krijg je een nieuw id én een nieuwe secret — vernieuw beide).\n"
+            "- Geroteerd? Gebruik overal de **nieuwe** keys.\n"
+            "- `ALPACA_PAPER = \"true\"` hoort bij een `PK…`-key; `\"false\"` bij een `AK…`-key."
+        )
 
 # ---- Equity-curve ----
 st.subheader("Equity-curve (3 maanden)")
