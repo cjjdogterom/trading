@@ -6,6 +6,7 @@ Of direct:  streamlit run dashboard/app.py
 
 from __future__ import annotations
 
+import json
 import os
 import sys
 from datetime import datetime, timezone
@@ -33,6 +34,19 @@ def _broker() -> Broker:
 @st.cache_resource
 def _db() -> DB:
     return DB()
+
+
+_SNAPSHOT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "snapshot.json")
+
+
+@st.cache_data(ttl=60)
+def _snapshot() -> dict:
+    """Door de dagelijkse GitHub Action gecommitte data (voor Streamlit Cloud)."""
+    try:
+        with open(_SNAPSHOT) as f:
+            return json.load(f)
+    except Exception:
+        return {}
 
 
 @st.cache_data(ttl=60)
@@ -71,19 +85,19 @@ def _equity_curve() -> pd.DataFrame:
 
 @st.cache_data(ttl=60)
 def _sentiment() -> pd.DataFrame:
-    rows = [dict(r) for r in _db().latest_sentiment()]
+    rows = [dict(r) for r in _db().latest_sentiment()] or _snapshot().get("sentiment", [])
     return pd.DataFrame(rows)
 
 
 @st.cache_data(ttl=60)
 def _signals() -> pd.DataFrame:
-    rows = [dict(r) for r in _db().recent_signals(40)]
+    rows = [dict(r) for r in _db().recent_signals(40)] or _snapshot().get("signals", [])
     return pd.DataFrame(rows)
 
 
 @st.cache_data(ttl=60)
 def _trades() -> pd.DataFrame:
-    rows = [dict(r) for r in _db().recent_trades(60)]
+    rows = [dict(r) for r in _db().recent_trades(60)] or _snapshot().get("trades", [])
     return pd.DataFrame(rows)
 
 

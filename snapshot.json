@@ -1,0 +1,429 @@
+{
+  "generated_at": "2026-06-13T14:04:17.094844+00:00",
+  "mode": "advisory",
+  "sentiment": [
+    {
+      "id": 8,
+      "symbol": "AMD",
+      "day": "2026-06-13",
+      "score": 1.0,
+      "label": "bullish",
+      "confidence": 0.2,
+      "rationale": "2 bullish vs 0 bearish signaalwoorden in de koppen.",
+      "n_articles": 3,
+      "engine": "lexicon",
+      "created_at": "2026-06-13T14:04:16.392599+00:00"
+    },
+    {
+      "id": 4,
+      "symbol": "AMZN",
+      "day": "2026-06-13",
+      "score": 1.0,
+      "label": "bullish",
+      "confidence": 0.5,
+      "rationale": "5 bullish vs 0 bearish signaalwoorden in de koppen.",
+      "n_articles": 12,
+      "engine": "lexicon",
+      "created_at": "2026-06-13T14:04:15.528487+00:00"
+    },
+    {
+      "id": 3,
+      "symbol": "NVDA",
+      "day": "2026-06-13",
+      "score": 0.8,
+      "label": "bullish",
+      "confidence": 1.0,
+      "rationale": "9 bullish vs 1 bearish signaalwoorden in de koppen.",
+      "n_articles": 14,
+      "engine": "lexicon",
+      "created_at": "2026-06-13T14:04:15.265492+00:00"
+    },
+    {
+      "id": 1,
+      "symbol": "AAPL",
+      "day": "2026-06-13",
+      "score": 0.538,
+      "label": "bullish",
+      "confidence": 1.0,
+      "rationale": "10 bullish vs 3 bearish signaalwoorden in de koppen.",
+      "n_articles": 11,
+      "engine": "lexicon",
+      "created_at": "2026-06-13T14:04:14.484286+00:00"
+    },
+    {
+      "id": 7,
+      "symbol": "TSLA",
+      "day": "2026-06-13",
+      "score": 0.5,
+      "label": "bullish",
+      "confidence": 0.4,
+      "rationale": "3 bullish vs 1 bearish signaalwoorden in de koppen.",
+      "n_articles": 13,
+      "engine": "lexicon",
+      "created_at": "2026-06-13T14:04:16.174205+00:00"
+    },
+    {
+      "id": 10,
+      "symbol": "SPY",
+      "day": "2026-06-13",
+      "score": 0.333,
+      "label": "bullish",
+      "confidence": 0.6,
+      "rationale": "4 bullish vs 2 bearish signaalwoorden in de koppen.",
+      "n_articles": 25,
+      "engine": "lexicon",
+      "created_at": "2026-06-13T14:04:16.918222+00:00"
+    },
+    {
+      "id": 9,
+      "symbol": "JPM",
+      "day": "2026-06-13",
+      "score": 0.0,
+      "label": "neutral",
+      "confidence": 0.2,
+      "rationale": "Geen duidelijke sentiment-woorden gevonden.",
+      "n_articles": 5,
+      "engine": "lexicon",
+      "created_at": "2026-06-13T14:04:16.685594+00:00"
+    },
+    {
+      "id": 6,
+      "symbol": "META",
+      "day": "2026-06-13",
+      "score": 0.0,
+      "label": "neutral",
+      "confidence": 0.4,
+      "rationale": "2 bullish vs 2 bearish signaalwoorden in de koppen.",
+      "n_articles": 5,
+      "engine": "lexicon",
+      "created_at": "2026-06-13T14:04:15.955686+00:00"
+    },
+    {
+      "id": 2,
+      "symbol": "MSFT",
+      "day": "2026-06-13",
+      "score": 0.0,
+      "label": "neutral",
+      "confidence": 0.6,
+      "rationale": "3 bullish vs 3 bearish signaalwoorden in de koppen.",
+      "n_articles": 8,
+      "engine": "lexicon",
+      "created_at": "2026-06-13T14:04:15.010595+00:00"
+    },
+    {
+      "id": 5,
+      "symbol": "GOOGL",
+      "day": "2026-06-13",
+      "score": -0.333,
+      "label": "bearish",
+      "confidence": 0.6,
+      "rationale": "2 bullish vs 4 bearish signaalwoorden in de koppen.",
+      "n_articles": 13,
+      "engine": "lexicon",
+      "created_at": "2026-06-13T14:04:15.730968+00:00"
+    }
+  ],
+  "signals": [
+    {
+      "id": 30,
+      "symbol": "SPY",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend -0.09, sent +0.33). koers 741.67 < SMA20 745.04; SMA20 > SMA50 722.75; 20d-momentum +0.3%",
+      "sentiment": 0.333,
+      "trend": -0.09,
+      "created_at": "2026-06-13T14:04:17.090689+00:00"
+    },
+    {
+      "id": 29,
+      "symbol": "JPM",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend +0.33, sent +0.00). koers 320.71 > SMA20 304.83; SMA20 < SMA50 306.60; 20d-momentum +7.7%",
+      "sentiment": 0.0,
+      "trend": 0.331,
+      "created_at": "2026-06-13T14:04:16.806633+00:00"
+    },
+    {
+      "id": 28,
+      "symbol": "AMD",
+      "day": "2026-06-13",
+      "action": "buy",
+      "reason": "Trend bullish (+1.00) \u00e9n sentiment positief (+1.00). koers 511.74 > SMA20 481.94; SMA20 > SMA50 386.75; 20d-momentum +20.7%",
+      "sentiment": 1.0,
+      "trend": 1.0,
+      "created_at": "2026-06-13T14:04:16.568649+00:00"
+    },
+    {
+      "id": 27,
+      "symbol": "TSLA",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend -0.21, sent +0.50). koers 406.54 < SMA20 415.71; SMA20 > SMA50 398.27; 20d-momentum -3.7%",
+      "sentiment": 0.5,
+      "trend": -0.212,
+      "created_at": "2026-06-13T14:04:16.284936+00:00"
+    },
+    {
+      "id": 26,
+      "symbol": "META",
+      "day": "2026-06-13",
+      "action": "avoid",
+      "reason": "Trend/sentiment negatief (trend -0.93, sent +0.00). koers 566.92 < SMA20 604.23; SMA20 < SMA50 621.83; 20d-momentum -7.7%",
+      "sentiment": 0.0,
+      "trend": -0.932,
+      "created_at": "2026-06-13T14:04:16.059952+00:00"
+    },
+    {
+      "id": 25,
+      "symbol": "GOOGL",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend -0.38, sent -0.33). koers 359.65 < SMA20 376.46; SMA20 > SMA50 362.27; 20d-momentum -9.4%",
+      "sentiment": -0.333,
+      "trend": -0.381,
+      "created_at": "2026-06-13T14:04:15.836438+00:00"
+    },
+    {
+      "id": 24,
+      "symbol": "AMZN",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend -0.39, sent +1.00). koers 238.56 < SMA20 257.25; SMA20 > SMA50 254.77; 20d-momentum -9.7%",
+      "sentiment": 1.0,
+      "trend": -0.391,
+      "created_at": "2026-06-13T14:04:15.631691+00:00"
+    },
+    {
+      "id": 23,
+      "symbol": "NVDA",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend -0.37, sent +0.80). koers 205.17 < SMA20 214.63; SMA20 > SMA50 206.91; 20d-momentum -8.9%",
+      "sentiment": 0.8,
+      "trend": -0.368,
+      "created_at": "2026-06-13T14:04:15.420144+00:00"
+    },
+    {
+      "id": 22,
+      "symbol": "MSFT",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend -0.32, sent +0.00). koers 390.67 < SMA20 419.71; SMA20 > SMA50 411.77; 20d-momentum -7.4%",
+      "sentiment": 0.0,
+      "trend": -0.323,
+      "created_at": "2026-06-13T14:04:15.143193+00:00"
+    },
+    {
+      "id": 21,
+      "symbol": "AAPL",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend -0.19, sent +0.54). koers 291.08 < SMA20 303.87; SMA20 > SMA50 285.47; 20d-momentum -3.0%",
+      "sentiment": 0.538,
+      "trend": -0.191,
+      "created_at": "2026-06-13T14:04:14.899847+00:00"
+    },
+    {
+      "id": 20,
+      "symbol": "SPY",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend -0.09, sent +0.33). koers 741.67 < SMA20 745.04; SMA20 > SMA50 722.75; 20d-momentum +0.3%",
+      "sentiment": 0.333,
+      "trend": -0.09,
+      "created_at": "2026-06-13T13:51:13.823489+00:00"
+    },
+    {
+      "id": 19,
+      "symbol": "JPM",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend +0.33, sent +0.00). koers 320.71 > SMA20 304.83; SMA20 < SMA50 306.60; 20d-momentum +7.7%",
+      "sentiment": 0.0,
+      "trend": 0.331,
+      "created_at": "2026-06-13T13:51:13.594377+00:00"
+    },
+    {
+      "id": 18,
+      "symbol": "AMD",
+      "day": "2026-06-13",
+      "action": "buy",
+      "reason": "Trend bullish (+1.00) \u00e9n sentiment positief (+1.00). koers 511.74 > SMA20 481.94; SMA20 > SMA50 386.75; 20d-momentum +20.7%",
+      "sentiment": 1.0,
+      "trend": 1.0,
+      "created_at": "2026-06-13T13:51:13.372645+00:00"
+    },
+    {
+      "id": 17,
+      "symbol": "TSLA",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend -0.21, sent +0.50). koers 406.54 < SMA20 415.71; SMA20 > SMA50 398.27; 20d-momentum -3.7%",
+      "sentiment": 0.5,
+      "trend": -0.212,
+      "created_at": "2026-06-13T13:51:13.088270+00:00"
+    },
+    {
+      "id": 16,
+      "symbol": "META",
+      "day": "2026-06-13",
+      "action": "avoid",
+      "reason": "Trend/sentiment negatief (trend -0.93, sent +0.00). koers 566.92 < SMA20 604.23; SMA20 < SMA50 621.83; 20d-momentum -7.7%",
+      "sentiment": 0.0,
+      "trend": -0.932,
+      "created_at": "2026-06-13T13:51:12.855735+00:00"
+    },
+    {
+      "id": 15,
+      "symbol": "GOOGL",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend -0.38, sent -0.33). koers 359.65 < SMA20 376.46; SMA20 > SMA50 362.27; 20d-momentum -9.4%",
+      "sentiment": -0.333,
+      "trend": -0.381,
+      "created_at": "2026-06-13T13:51:12.562684+00:00"
+    },
+    {
+      "id": 14,
+      "symbol": "AMZN",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend -0.39, sent +1.00). koers 238.56 < SMA20 257.25; SMA20 > SMA50 254.77; 20d-momentum -9.7%",
+      "sentiment": 1.0,
+      "trend": -0.391,
+      "created_at": "2026-06-13T13:51:12.339959+00:00"
+    },
+    {
+      "id": 13,
+      "symbol": "NVDA",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend -0.37, sent +0.80). koers 205.17 < SMA20 214.63; SMA20 > SMA50 206.91; 20d-momentum -8.9%",
+      "sentiment": 0.8,
+      "trend": -0.368,
+      "created_at": "2026-06-13T13:51:12.115523+00:00"
+    },
+    {
+      "id": 12,
+      "symbol": "MSFT",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend -0.32, sent +0.00). koers 390.67 < SMA20 419.71; SMA20 > SMA50 411.77; 20d-momentum -7.4%",
+      "sentiment": 0.0,
+      "trend": -0.323,
+      "created_at": "2026-06-13T13:51:11.842241+00:00"
+    },
+    {
+      "id": 11,
+      "symbol": "AAPL",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend -0.19, sent +0.54). koers 291.08 < SMA20 303.87; SMA20 > SMA50 285.47; 20d-momentum -3.0%",
+      "sentiment": 0.538,
+      "trend": -0.191,
+      "created_at": "2026-06-13T13:51:11.604984+00:00"
+    },
+    {
+      "id": 10,
+      "symbol": "SPY",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend +0.00, sent +0.33). Te weinig historie.",
+      "sentiment": 0.333,
+      "trend": 0.0,
+      "created_at": "2026-06-13T13:50:12.246673+00:00"
+    },
+    {
+      "id": 9,
+      "symbol": "JPM",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend +0.00, sent +0.00). Te weinig historie.",
+      "sentiment": 0.0,
+      "trend": 0.0,
+      "created_at": "2026-06-13T13:50:12.031830+00:00"
+    },
+    {
+      "id": 8,
+      "symbol": "AMD",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend +0.00, sent +1.00). Te weinig historie.",
+      "sentiment": 1.0,
+      "trend": 0.0,
+      "created_at": "2026-06-13T13:50:11.820022+00:00"
+    },
+    {
+      "id": 7,
+      "symbol": "TSLA",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend +0.00, sent +0.50). Te weinig historie.",
+      "sentiment": 0.5,
+      "trend": 0.0,
+      "created_at": "2026-06-13T13:50:11.538658+00:00"
+    },
+    {
+      "id": 6,
+      "symbol": "META",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend +0.00, sent +0.00). Te weinig historie.",
+      "sentiment": 0.0,
+      "trend": 0.0,
+      "created_at": "2026-06-13T13:50:11.323277+00:00"
+    },
+    {
+      "id": 5,
+      "symbol": "GOOGL",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend +0.00, sent -0.33). Te weinig historie.",
+      "sentiment": -0.333,
+      "trend": 0.0,
+      "created_at": "2026-06-13T13:50:11.115488+00:00"
+    },
+    {
+      "id": 4,
+      "symbol": "AMZN",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend +0.00, sent +1.00). Te weinig historie.",
+      "sentiment": 1.0,
+      "trend": 0.0,
+      "created_at": "2026-06-13T13:50:10.905326+00:00"
+    },
+    {
+      "id": 3,
+      "symbol": "NVDA",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend +0.00, sent +0.80). Te weinig historie.",
+      "sentiment": 0.8,
+      "trend": 0.0,
+      "created_at": "2026-06-13T13:50:10.678399+00:00"
+    },
+    {
+      "id": 2,
+      "symbol": "MSFT",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend +0.00, sent +0.00). Te weinig historie.",
+      "sentiment": 0.0,
+      "trend": 0.0,
+      "created_at": "2026-06-13T13:50:10.465669+00:00"
+    },
+    {
+      "id": 1,
+      "symbol": "AAPL",
+      "day": "2026-06-13",
+      "action": "hold",
+      "reason": "Geen confluentie (trend +0.00, sent +0.54). Te weinig historie.",
+      "sentiment": 0.538,
+      "trend": 0.0,
+      "created_at": "2026-06-13T13:50:10.249366+00:00"
+    }
+  ],
+  "trades": []
+}

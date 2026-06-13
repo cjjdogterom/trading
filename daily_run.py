@@ -7,8 +7,11 @@ Of direct (cron):    python daily_run.py
 
 from __future__ import annotations
 
+import json
 import logging
+import os
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 from trailing_stop import Broker, load_settings
 from storage import DB
@@ -76,11 +79,38 @@ def run_daily(
     buys = sum(1 for r in results if r.get("action") == "buy")
     log.info("Klaar. %d koopsignalen, %d orders geplaatst (mode=%s).",
              buys, placed, executor.mode)
+
+    _write_snapshot(db, mode=executor.mode)
     return results
+
+
+def _write_snapshot(db: DB, *, mode: str, path: str = "snapshot.json") -> None:
+    """Exporteer sentiment/signalen/trades naar JSON zodat het dashboard (op
+    Streamlit Cloud, zonder lokale DB) de laatste data kan tonen."""
+    snap = {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "mode": mode,
+        "sentiment": [dict(r) for r in db.latest_sentiment()],
+        "signals": [dict(r) for r in db.recent_signals(40)],
+        "trades": [dict(r) for r in db.recent_trades(60)],
+    }
+    Path(path).write_text(json.dumps(snap, indent=2, default=str))
+    log.info("Snapshot weggeschreven naar %s.", path)
+
+
+def _truthy(value: str | None) -> bool:
+    return str(value or "").strip().lower() in {"1", "true", "yes", "on"}
 
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO,
                         format="%(asctime)s %(levelname)-7s %(message)s",
                         datefmt="%H:%M:%S")
-    run_daily(execute=False)
+    # In de cloud (GitHub Actions) wordt gedrag via env-secrets gestuurd:
+    #   EXECUTE=true            -> plaats orders (anders alleen advies)
+    #   ALLOW_LIVE_AUTOTRADE=true -> sta live trading toe (anders geblokkeerd)
+    #   ALPACA_PAPER=false + AK-key -> live account
+    run_daily(
+        execute=_truthy(os.getenv("EXECUTE")),
+        allow_live=_truthy(os.getenv("ALLOW_LIVE_AUTOTRADE")),
+    )

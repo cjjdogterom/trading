@@ -1,0 +1,5 @@
+# Slanke dependencies voor de dagelijkse cloud-run (GitHub Actions).
+# Geen streamlit/pandas/plotly nodig — die zijn alleen voor het dashboard.
+alpaca-py>=0.30
+python-dotenv>=1.0
+anthropic>=0.40

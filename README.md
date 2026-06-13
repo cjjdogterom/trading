@@ -135,6 +135,51 @@ met `--execute` aan als je orders wilt laten plaatsen.
 
 ---
 
+## In de cloud deployen
+
+> **Niet op Vercel.** Vercel draait alleen korte serverless-functies — geen
+> Streamlit-dashboard en geen langlopende processen. Verwijder het Vercel-project;
+> elk onderdeel hoort op een passende plek (hieronder).
+
+### Agents elke dag in de cloud — GitHub Actions
+
+`.github/workflows/daily.yml` draait elke handelsdag (`daily_run.py`) en commit
+daarna `snapshot.json` terug, zodat het dashboard de verse data toont.
+
+Zet in GitHub → **Settings → Secrets and variables → Actions** deze secrets:
+
+| Secret | Waarde |
+|---|---|
+| `ALPACA_API_KEY` / `ALPACA_SECRET_KEY` | je keys (PK… = paper, AK… = live) |
+| `ALPACA_PAPER` | `true` (paper) of `false` (live) |
+| `ANTHROPIC_API_KEY` | optioneel — schakelt Claude-sentiment in |
+| `EXECUTE` | `true` om orders te plaatsen (laat leeg/`false` voor alleen advies) |
+| `ALLOW_LIVE_AUTOTRADE` | `true` is **vereist** voor LIVE traden |
+
+**Live auto-traden in de cloud** gebeurt alleen als álle drie kloppen: een live
+`AK…`-key, `EXECUTE=true`, én `ALLOW_LIVE_AUTOTRADE=true`. Eén ervan vergeten →
+geen live orders. **Begin op paper** (`ALPACA_PAPER=true`, eventueel `EXECUTE=true`)
+en zet pas live als je het wekenlang vertrouwt.
+
+Tijd aanpassen: de cron `0 14 * * 1-5` staat in UTC (≈ 10:00 New York zomertijd).
+Handmatig starten kan via de **Actions**-tab → "Run workflow".
+
+### Dashboard online — Streamlit Community Cloud
+
+1. Ga naar [share.streamlit.io](https://share.streamlit.io) en log in met GitHub.
+2. "New app" → repo `cjjdogterom/trading`, branch `main`, **main file** `dashboard/app.py`.
+3. Bij **Advanced → Secrets** (TOML-formaat):
+   ```toml
+   ALPACA_API_KEY = "..."
+   ALPACA_SECRET_KEY = "..."
+   ALPACA_PAPER = "true"
+   ```
+   (zet hier dezelfde keys als je in het account wilt zien)
+4. Deploy. Account/posities/equity komen live van Alpaca; sentiment/signalen/trades
+   uit de `snapshot.json` die de GitHub Action dagelijks bijwerkt.
+
+---
+
 ## Tests
 
 ```bash
