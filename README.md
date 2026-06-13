@@ -164,6 +164,35 @@ en zet pas live als je het wekenlang vertrouwt.
 Tijd aanpassen: de cron `0 14 * * 1-5` staat in UTC (≈ 10:00 New York zomertijd).
 Handmatig starten kan via de **Actions**-tab → "Run workflow".
 
+### De hele dag traden — always-on worker (Nasdaq-100)
+
+`worker.py` draait continu en handelt door de beursdag heen op de **Nasdaq-100**
+(bewerkbaar via `universe.json`):
+
+- elke ~15 min: trend/momentum + ATR per aandeel uit één gebatchte data-call;
+- de best gerangschikte koopkandidaten (trend + sentiment) worden gekocht tot de
+  vrije posities vol zijn — dat is de **spreiding**, datagedreven binnen je limieten;
+- elke entry krijgt een **ATR-gebaseerde (volatiliteit-adaptieve) trailing stop**,
+  begrensd op `min_trail_pct`–`max_trail_pct` — de strategie stelt zichzelf af, maar
+  binnen vaste kaders;
+- sentiment ververst 1×/dag (kostenbeheersing — gebruik `SENTIMENT_MODEL=claude-haiku-4-5`);
+- exits lopen 24/5 server-side via de native trailing stops.
+
+Dit vraagt een **altijd-aan host** (Streamlit Cloud/GitHub Actions kunnen niet
+continu draaien). Op [Railway](https://railway.app), [Render](https://render.com)
+of [Fly.io](https://fly.io):
+
+1. Maak een **Background Worker** / service vanuit de GitHub-repo.
+2. Start-commando: `python worker.py` (er is een `Procfile`).
+3. Zet env-vars (zelfde als GitHub Secrets hierboven) + eventueel:
+   `MAX_POSITIONS`, `MAX_POSITION_PCT`, `MAX_DAILY_LOSS`, `ATR_MULT`, `SIGNAL_INTERVAL_MIN`.
+
+Lokaal testen kan ook gewoon: `python worker.py` (laat het draaien; Ctrl-C stopt
+het, de trailing stops blijven bij Alpaca staan).
+
+> **Live** vereist nog steeds álle schakelaars: `ALPACA_PAPER=false` + AK-key,
+> `EXECUTE=true`, én `ALLOW_LIVE_AUTOTRADE=true`. Begin op paper.
+
 ### Dashboard online — Streamlit Community Cloud
 
 1. Ga naar [share.streamlit.io](https://share.streamlit.io) en log in met GitHub.

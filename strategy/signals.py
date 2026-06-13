@@ -44,12 +44,10 @@ def _sma(values: list[float], window: int) -> float:
     return sum(values[-window:]) / window
 
 
-def trend_score(broker, symbol: str) -> tuple[float, float, str]:
-    """Trend/momentum-score in [-1, 1], plus de laatste koers en een uitleg.
-
-    Opbouw: 40% prijs t.o.v. SMA20, 30% SMA20 t.o.v. SMA50, 30% 20-daags momentum.
-    """
-    closes = _closes(broker, symbol)
+def trend_from_closes(closes: list[float]) -> tuple[float, float, str]:
+    """Trend/momentum-score in [-1, 1] uit een reeks slotkoersen, plus laatste
+    koers en uitleg. Opbouw: 40% prijs vs SMA20, 30% SMA20 vs SMA50, 30% 20d-momentum.
+    Pure functie — geen netwerk; werkt met losse én gebatchte bars."""
     if len(closes) < 20:
         return 0.0, (closes[-1] if closes else 0.0), "Te weinig historie."
     price = closes[-1]
@@ -70,6 +68,11 @@ def trend_score(broker, symbol: str) -> tuple[float, float, str]:
         f"20d-momentum {momentum * 100:+.1f}%"
     )
     return round(clamp(s), 3), price, reason
+
+
+def trend_score(broker, symbol: str) -> tuple[float, float, str]:
+    """Trend/momentum voor één symbool (haalt zelf de bars op)."""
+    return trend_from_closes(_closes(broker, symbol))
 
 
 def generate_signal(

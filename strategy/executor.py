@@ -56,10 +56,10 @@ class Executor:
         acct = self.broker.trading.get_account()
         self._equity = float(acct.equity)
         dl = daily_loss_pct(acct)
-        if dl <= -self.limits.max_daily_loss_pct:
+        self._halted = dl <= -self.limits.max_daily_loss_pct  # elke cyclus opnieuw bepaald
+        if self._halted:
             log.warning("🛑 KILL-SWITCH: dagverlies %.2f%% (limiet -%.2f%%). Geen nieuwe trades.",
                         dl, self.limits.max_daily_loss_pct)
-            self._halted = True
         positions = self.broker.trading.get_all_positions()
         self._open_symbols = {p.symbol for p in positions}
         self._open_count = len(positions)
@@ -110,36 +110,47 @@ class Executor:
             return f"max {self.limits.max_open_positions} posities bereikt"
         return None
 
-    def _buy_with_trailing_stop(self, signal, qty, today, res) -> None:
-        order = self.broker.submit_market(signal.symbol, qty, OrderSide.BUY)
-        log.info("Order BUY %s x%s ingelegd (%s, order %s).",
-                 signal.symbol, qty, self.mode, order.id)
+    def buy(self, symbol: str, qty: float, price: float, *,
+            trail_percent: float | None = None, trail_price: float | None = None) -> dict:
+        """Market BUY + native trailing stop + trade vastleggen.
+
+        Gaat uit van self.execute=True (de aanroeper beslist over advisory).
+        Geef precies één van trail_percent of trail_price (bv. ATR-gebaseerd).
+        De live-grendel zit al in __init__, dus dit kan niet ongemerkt live gaan.
+        """
+        res = {"symbol": symbol, "qty": qty, "placed": False, "mode": self.mode}
+        order = self.broker.submit_market(symbol, qty, OrderSide.BUY)
+        log.info("Order BUY %s x%s (%s, order %s).", symbol, qty, self.mode, order.id)
         res["placed"] = True
         res["order_id"] = str(order.id)
 
         filled = self._await_fill(order.id)
         if filled:
             try:
-                place_native_trailing_stop(
-                    self.broker, signal.symbol, trail_percent=self.limits.trail_percent
-                )
-                res["trailing_stop"] = f"{self.limits.trail_percent}%"
+                place_native_trailing_stop(self.broker, symbol,
+                                           trail_percent=trail_percent, trail_price=trail_price)
+                res["trailing_stop"] = (f"{trail_percent}%" if trail_percent is not None
+                                        else f"${trail_price}")
             except Exception as exc:
-                log.warning("Trailing stop voor %s plaatsen mislukt: %s", signal.symbol, exc)
+                log.warning("Trailing stop voor %s plaatsen mislukt: %s", symbol, exc)
                 res["trailing_stop"] = f"MISLUKT: {exc}"
         else:
-            log.warning("Order %s nog niet gevuld (markt dicht?). Trailing stop volgt later.",
-                        signal.symbol)
-            res["trailing_stop"] = "uitgesteld (order niet gevuld)"
+            log.warning("Order %s niet gevuld (markt dicht?). Trailing stop volgt later.", symbol)
+            res["trailing_stop"] = "uitgesteld (niet gevuld)"
 
-        self._open_symbols.add(signal.symbol)
+        self._open_symbols.add(symbol)
         self._open_count += 1
         self.db.add_trade({
-            "symbol": signal.symbol, "side": "buy", "qty": qty,
-            "price": signal.price, "order_id": str(order.id), "mode": self.mode,
+            "symbol": symbol, "side": "buy", "qty": qty, "price": price,
+            "order_id": str(order.id), "mode": self.mode,
             "status": "filled" if filled else "pending", "signal_id": None,
             "created_at": datetime.now(timezone.utc).isoformat(),
         })
+        return res
+
+    def _buy_with_trailing_stop(self, signal, qty, today, res) -> None:
+        res.update(self.buy(signal.symbol, qty, signal.price,
+                            trail_percent=self.limits.trail_percent))
 
     def _await_fill(self, order_id, *, tries: int = 8, delay: float = 1.0) -> bool:
         for _ in range(tries):
