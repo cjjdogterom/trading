@@ -1,0 +1,14 @@
+# Fly.io config voor de always-on trading-worker.
+# Pas 'app' aan naar een unieke naam (anders weigert Fly de deploy).
+app = "cjj-trading-worker"
+primary_region = "ams"          # Amsterdam; dichtbij. Mag ook "iad" (US-east).
+
+[build]
+
+# Eén worker-proces, geen webserver → geen poort/health-check nodig.
+[processes]
+app = "python worker.py"
+
+[[vm]]
+size = "shared-cpu-1x"
+memory = "512mb"

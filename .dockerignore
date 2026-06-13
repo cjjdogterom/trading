@@ -1,0 +1,15 @@
+# Houd secrets en rommel uit het Docker-image (secrets komen via `fly secrets`).
+.env
+.venv/
+*.docx
+~$*.docx
+data/
+.state/
+*.db
+*.sqlite*
+snapshot.json
+.git/
+__pycache__/
+*.pyc
+*.log
+.DS_Store
