@@ -1,0 +1,25 @@
+# Secrets — NOOIT committen
+.env
+
+# Word-documenten (bevatten mogelijk API-keys in platte tekst)
+*.docx
+~$*.docx
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Data & state (lokaal, niet delen)
+.state/
+*.state.json
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+
+# OS
+.DS_Store

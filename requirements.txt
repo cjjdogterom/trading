@@ -1,0 +1,6 @@
+alpaca-py>=0.30
+python-dotenv>=1.0
+streamlit>=1.30
+pandas>=2.0
+plotly>=5.18
+anthropic>=0.40        # optioneel; alleen nodig voor Claude-sentiment
