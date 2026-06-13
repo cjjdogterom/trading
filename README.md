@@ -169,14 +169,21 @@ Handmatig starten kan via de **Actions**-tab → "Run workflow".
 `worker.py` draait continu en handelt door de beursdag heen op de **Nasdaq-100**
 (bewerkbaar via `universe.json`):
 
-- elke ~15 min: trend/momentum + ATR per aandeel uit één gebatchte data-call;
+- elke ~15 min: trend/momentum + ATR + **RSI/waardering** per aandeel uit één gebatchte call;
 - de best gerangschikte koopkandidaten (trend + sentiment) worden gekocht tot de
   vrije posities vol zijn — dat is de **spreiding**, datagedreven binnen je limieten;
-- elke entry krijgt een **ATR-gebaseerde (volatiliteit-adaptieve) trailing stop**,
-  begrensd op `min_trail_pct`–`max_trail_pct` — de strategie stelt zichzelf af, maar
-  binnen vaste kaders;
+- **niet te duur instappen:** aandelen die overbought zijn (RSI > `rsi_max_entry`)
+  worden overgeslagen — uit historische koersen bepaalt hij 'goedkoop/neutraal/duur';
+- **ladder / goedkoop bijkopen:** een positie wordt in `ladder_rungs` stukjes opgebouwd;
+  zakt de koers ≥ `ladder_step_pct`% (en is de uptrend intact), dan koopt hij goedkoper
+  bij — maar de **trailing stop is de harde bodem**: valt de prijs daar doorheen, dan
+  wordt alles verkocht. Zo kan averaging-down nooit ontsporen;
+- elke entry/bijkoop krijgt een **ATR-gebaseerde (volatiliteit-adaptieve) trailing stop**,
+  begrensd op `min_trail_pct`–`max_trail_pct`;
 - sentiment ververst 1×/dag (kostenbeheersing — gebruik `SENTIMENT_MODEL=claude-haiku-4-5`);
 - exits lopen 24/5 server-side via de native trailing stops.
+
+Ladder-knoppen (env): `LADDER_RUNGS` (3), `LADDER_STEP_PCT` (4), `RSI_MAX_ENTRY` (70).
 
 Dit vraagt een **altijd-aan host** (Streamlit Cloud/GitHub Actions kunnen niet
 continu draaien). Op [Railway](https://railway.app), [Render](https://render.com)

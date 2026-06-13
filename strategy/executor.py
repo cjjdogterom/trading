@@ -148,6 +148,28 @@ class Executor:
         })
         return res
 
+    def add_rung(self, symbol: str, add_qty: float, price: float, *,
+                 trail_price: float | None = None) -> dict:
+        """Koop een extra stukje bij (ladder) en zet de trailing stop opnieuw voor
+        de HELE positie. De oude stop wordt eerst geannuleerd (anders dubbel verkopen)."""
+        res = {"symbol": symbol, "added": add_qty, "placed": False, "mode": self.mode}
+        order = self.broker.submit_market(symbol, add_qty, OrderSide.BUY)
+        log.info("LADDER bijkopen %s +%s @ %.2f (%s).", symbol, add_qty, price, self.mode)
+        res["placed"] = True
+        if self._await_fill(order.id):
+            self.broker.cancel_open_orders(symbol)               # oude trailing stop weg
+            try:
+                place_native_trailing_stop(self.broker, symbol, trail_price=trail_price)
+                res["trailing_stop"] = f"${trail_price} (volledige positie)"
+            except Exception as exc:
+                log.warning("Trailing stop herzetten %s mislukt: %s", symbol, exc)
+        self.db.add_trade({
+            "symbol": symbol, "side": "buy", "qty": add_qty, "price": price,
+            "order_id": str(order.id), "mode": self.mode, "status": "ladder_add",
+            "signal_id": None, "created_at": datetime.now(timezone.utc).isoformat(),
+        })
+        return res
+
     def _buy_with_trailing_stop(self, signal, qty, today, res) -> None:
         res.update(self.buy(signal.symbol, qty, signal.price,
                             trail_percent=self.limits.trail_percent))

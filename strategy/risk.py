@@ -22,6 +22,10 @@ class RiskLimits:
     atr_period: int = 14
     min_trail_pct: float = 3.0       # ondergrens trail (niet te krap)
     max_trail_pct: float = 20.0      # bovengrens trail (niet absurd wijd)
+    # Ladder / goedkoop bijkopen (de trailing stop blijft de harde bodem):
+    ladder_rungs: int = 3            # in hoeveel stukjes een positie wordt opgebouwd
+    ladder_step_pct: float = 4.0     # bijkopen bij elke X% daling t.o.v. de vorige koop
+    rsi_max_entry: float = 70.0      # niet instappen als overbought ('te duur')
 
 
 def position_size(equity: float, price: float, max_position_pct: float) -> int:

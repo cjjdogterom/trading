@@ -75,6 +75,39 @@ def trend_score(broker, symbol: str) -> tuple[float, float, str]:
     return trend_from_closes(_closes(broker, symbol))
 
 
+def rsi_from_closes(closes: list[float], period: int = 14) -> float:
+    """RSI (Relative Strength Index) — <30 oversold ('goedkoop'), >70 overbought ('duur')."""
+    if len(closes) < period + 1:
+        return 50.0
+    deltas = [closes[i] - closes[i - 1] for i in range(1, len(closes))][-period:]
+    avg_gain = sum(d for d in deltas if d > 0) / period
+    avg_loss = sum(-d for d in deltas if d < 0) / period
+    if avg_loss == 0:
+        return 100.0
+    rs = avg_gain / avg_loss
+    return 100 - 100 / (1 + rs)
+
+
+def valuation(closes: list[float]) -> tuple[float, float, str]:
+    """Is het aandeel nu 'goedkoop' of 'duur'? Op basis van historische koersen.
+
+    Geeft (rsi, positie-in-range%, label). positie-in-range: 0 = jaarbodem, 100 = jaartop.
+    """
+    if not closes:
+        return 50.0, 50.0, "neutraal"
+    rsi = rsi_from_closes(closes)
+    window = closes[-252:]  # ~1 jaar handelsdagen (zoveel als beschikbaar)
+    hi, lo, price = max(window), min(window), closes[-1]
+    pos = (price - lo) / (hi - lo) * 100 if hi > lo else 50.0
+    if rsi < 35 or pos < 25:
+        label = "goedkoop"
+    elif rsi > 70 or pos > 80:
+        label = "duur"
+    else:
+        label = "neutraal"
+    return round(rsi, 1), round(pos, 1), label
+
+
 def generate_signal(
     broker,
     symbol: str,

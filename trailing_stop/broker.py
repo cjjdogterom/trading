@@ -7,12 +7,13 @@ from datetime import datetime, timedelta, timezone
 
 from alpaca.trading.client import TradingClient
 from alpaca.trading.requests import (
+    GetOrdersRequest,
     MarketOrderRequest,
     ReplaceOrderRequest,
     StopOrderRequest,
     TrailingStopOrderRequest,
 )
-from alpaca.trading.enums import OrderSide, PositionSide, TimeInForce
+from alpaca.trading.enums import OrderSide, PositionSide, QueryOrderStatus, TimeInForce
 from alpaca.data.historical import StockHistoricalDataClient
 from alpaca.data.requests import StockBarsRequest, StockLatestTradeRequest
 from alpaca.data.timeframe import TimeFrame
@@ -151,3 +152,14 @@ class Broker:
             self.trading.cancel_order_by_id(order_id)
         except Exception:
             pass  # al gevuld/geannuleerd
+
+    def cancel_open_orders(self, symbol: str) -> None:
+        """Annuleer alle openstaande orders (bv. de oude trailing stop) van één symbool."""
+        try:
+            orders = self.trading.get_orders(
+                GetOrdersRequest(status=QueryOrderStatus.OPEN, symbols=[symbol])
+            )
+            for o in orders:
+                self.cancel_order(o.id)
+        except Exception:
+            pass

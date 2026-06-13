@@ -44,6 +44,16 @@ CREATE TABLE IF NOT EXISTS signals (
     created_at  TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS ladders (
+    symbol        TEXT PRIMARY KEY,
+    rungs_total   INTEGER NOT NULL,
+    rungs_filled  INTEGER NOT NULL,
+    last_fill     REAL NOT NULL,       -- koers van de laatste (bij)koop
+    rung_qty      REAL NOT NULL,       -- aantal aandelen per stukje
+    active        INTEGER NOT NULL,    -- 1 = nog actief opbouwen
+    updated_at    TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS trades (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     symbol      TEXT NOT NULL,
@@ -159,3 +169,29 @@ class DB:
             return c.execute(
                 "SELECT * FROM trades ORDER BY created_at DESC LIMIT ?", (limit,)
             ).fetchall()
+
+    # ---- ladders --------------------------------------------------------
+
+    def get_ladder(self, symbol: str) -> sqlite3.Row | None:
+        with self._conn() as c:
+            return c.execute("SELECT * FROM ladders WHERE symbol=?", (symbol,)).fetchone()
+
+    def upsert_ladder(self, row: dict) -> None:
+        with self._conn() as c:
+            c.execute(
+                """INSERT INTO ladders (symbol, rungs_total, rungs_filled, last_fill, rung_qty, active, updated_at)
+                   VALUES (:symbol,:rungs_total,:rungs_filled,:last_fill,:rung_qty,:active,:updated_at)
+                   ON CONFLICT(symbol) DO UPDATE SET
+                     rungs_total=excluded.rungs_total, rungs_filled=excluded.rungs_filled,
+                     last_fill=excluded.last_fill, rung_qty=excluded.rung_qty,
+                     active=excluded.active, updated_at=excluded.updated_at""",
+                row,
+            )
+
+    def active_ladders(self) -> list[sqlite3.Row]:
+        with self._conn() as c:
+            return c.execute("SELECT * FROM ladders WHERE active=1").fetchall()
+
+    def deactivate_ladder(self, symbol: str) -> None:
+        with self._conn() as c:
+            c.execute("UPDATE ladders SET active=0 WHERE symbol=?", (symbol,))
